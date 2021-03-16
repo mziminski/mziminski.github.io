@@ -78,11 +78,12 @@
                     </div>
                     <!-- Portfolio Item 2-->
                     <div class="col-md-6 col-lg-4 mb-5">
+                        <h5 class="text-center">CS 424 - Project 2</h5>
                         <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal2">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" src="assets/img/portfolio/cake.png" alt="" />
+                            <img class="img-fluid" src="assets/img/p2/part3.png" alt="" />
                         </div>
                     </div>
                     <!-- Portfolio Item 3-->
@@ -392,7 +393,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal2Label">Tasty Cake</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal1Label">Project 02</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -400,9 +401,117 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cake.png" alt="" />
+                                    <div id="project2CarouselIndicators" class="carousel slide carousel-fade" data-ride="carousel">
+                                        <ol class="carousel-indicators bg-dark">
+                                          <li data-target="#project2CarouselIndicators" data-slide-to="0" class="active "></li>
+                                          <li data-target="#project2CarouselIndicators" data-slide-to="1" class=""></li>
+                                          <li data-target="#project2CarouselIndicators" data-slide-to="2" class=""></li>
+                                          <li data-target="#project2CarouselIndicators" data-slide-to="3" class=""></li>
+                                          <li data-target="#project2CarouselIndicators" data-slide-to="4" class=""></li>
+                                        </ol>
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item active">
+                                                <img class="d-block w-100 rounded" src="assets/img/p2/part1.1.png" alt="First slide">
+                                            </div>
+                                            <div class="carousel-item">
+                                                <img class="d-block w-100 rounded" src="assets/img/p2/part1.2.png" alt="Second slide">
+                                            </div>
+                                            <div class="carousel-item">
+                                                <img class="d-block w-100 rounded" src="assets/img/p2/part2.1.png" alt="Third slide">
+                                            </div>
+                                            <div class="carousel-item">
+                                                <img class="d-block w-100 rounded" src="assets/img/p2/part2.2.png" alt="Fourth slide">
+                                            </div>
+                                            <div class="carousel-item">
+                                                <img class="d-block w-100 rounded" src="assets/img/p2/part2.3.png" alt="Fifth slide">
+                                            </div>
+                                            <div class="carousel-item">
+                                                <img class="d-block w-100 rounded" src="assets/img/p2/part3.png" alt="Sixth slide">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <h3 class="text-secondary text-uppercase mb-0" id="portfolioModal1Label">Intoduction</h3>
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                                    <p class="mb-5">This is my second CS 424, Data Analysis and Visualization, project. 
+                                        It's goal is to be able to visualize the data (linked below) using the R Leaflet package. This package produces a tiled map like google maps, of the data you provide it. Then to reiterate, this project uses R as the main language with the following packages (shiny, shinydashboard, reshape2, leaflet, DT) to preprocess, manipulate, and plot the data. RStudio is used as the main development environment, with ShinyApps.io as the prefered location for the deployment of the app.</p>
+                                    <h3 class="text-secondary text-uppercase mb-0" id="portfolioModal1Label">The 3 Project Objectives</h3> 
+                                    <ol class="mb-5">
+                                        <li>Show the plant generation data for the state of Illinois. Allow the user to pick and choose which energy sources they want to view.</li>
+                                        <li>Split the screen in half to have a Left/Right pane. Each pane needs to allow the user to be able to select a state and year to view. And there should be an option to be able to sync the check boxes between the 2 panes.</li>
+                                        <li>The user should be able to see the whole continential US, zoomed respectivly, and be able to use the check boxes from part 1/2 and an additional sliders for the power generation ranges. </li>
+                                    </ol>
+                                    <h3 class="text-secondary text-uppercase mb-0" id="portfolioModal1Label">How to Use</h3>
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-5">To start off, please click on the cloud icon at the end of thhis page and it will take you to ShinyApps.io, where this app is deployed. Once there, you'll be presented with the about page. Here you'll get a basic description of the project, any attributes and my contribution to it. Next hit the part 1 tab.</p>
+                                    <p class="mb-5"><b>Viewing Objective 1:</b> Here you'll see the map zoomed in to Illinois. The legend showing each energy source color can be found in the bottom right. Then at the top right the Check box pane is located and is transparent by default, but when you hover your mouse over it it becomes opaque. So it's easy to see when you need it, and it has a less of a presence when you don't need it. And to the top right corner is home to the zoom buttons, plus and minus, and the map reset button, which reset to the original sttatte that the map was loaded in. Moving on to object 2 now... </p>
+                                    <p class="mb-5"><b>Viewing Objective 2:</b> First click on the "Part 2" in the navigation bar. Once there, you should be able to see two map panes with state and year selectors above them. You should also see a sync button that hides the Left panes checkboxes and uses the Right pane's check boxes as input. These map panes have everything present and described in objective 1. The only addition is the 2 panes and the sync button. Now let's move on to part 3... </p>
+                                    <p class="mb-5"><b>Viewing Objective 3:</b> First click on the "Part 3" in the navigation bar. Once there, you should be able to see a single map zoomed out that shows the continentail US. You are also free to select what state to see and what year to view the data in. This map also have all the map features described in objective 1. So, with the tutorial complete spend some time investigating the data in either parts. </p>
+                                    <p class="mb-5"><b>Bonus Content:</b> To view the bonus content, click on the "About" tab in the left-side panel-tab. Here, you can see the credits/attributes for this project, and a another, but short, discription of the project.</p>
+                                    <p class="mb-5"><b>Post Script:</b> If you're interested in running the code yourself please click on the 1st link found at the botton of this page for the detailed description found on my GitHub Repository project page.
+                                    <h3 class="text-secondary text-uppercase mb-0" id="portfolioModal1Label">Data Attributes</h3>
+                                    <p class="mb-5"> As mentioned above I got the data from epa.gov, and the link to the data set is at the bottom. I first download the "eGRID2018v2" XLSX file, then the eGRID Historical files. I comed trough the historical files until I found the egrid_2010_data xls file and the egrid_2000_plant xls file. All three years were modified to have idential number and names for the comumns, and redundant columns were removed to reduce the file sizes of each file. For the 2018 xlsx file I wrote an R script to calculate the percentages of the individual fuel sources and the net generation amount. I then used the script to calculate the net renewable/nonrenewable generations, and the percent renewable/nonrenewable of the total generation. For years 2000 and 2010 I used Microsoft Excell to manually do all the processing the R script did for the year 2018. I did this because 2000/2010 had most of the data I needed I just needed to calculate 1-2 columns, so it wouldn't be worth it to run a script to calculate the values of 2 columns. </p>
+                                    <p class="mb-5"> If you want to use the data files for your own project, or if you want to just check out how I processed the files, you can go to my GithHub Project page, linked below, to download them. Just click on the data folder first or download the whole project to try it out for yourself.</p>
+                                    <h3 class="text-secondary text-uppercase mb-0" id="portfolioModal1Label">Interesting Data Insights</h3>
+                                    <!-- Portfolio Modal - Text-->
+                                    <div class="container">
+                                        <br>
+                                        <div class="row">
+                                            <h5>Geothermal US Map</h3>
+                                            <img class="d-block w-100 rounded" src="assets/img/p2/insights/GEO.png" alt="Geothermal Insight visual">
+                                            <p class="mb-5"><b>Insight 1:</b> In the above picture you can see the Geothermal energy sourced plants that are used in the US. As you see these plants are concentrated to the West coast of the United States and in Hawaii. This makes sense as there are specific geologic events going on under these locations to provide the geothermal energy to produce the needed electricity for the people living in these locations. In fall 2019 I took EAES 111, and in this class we had a unit were we learned about the processes of plate techtonics. In this unit we learned about the different plate boundries (subduction, convergent, and translational), but we also learned how hotspots. And these are what facilitated geothermal energy to work in Hawaii and the West coast of the US. Hawaii is a hotspot valcano moving in the NE direction (hence the island arc), then then Southern California is near a transitional plate boundry, while northern California has a subduction zone. And, Yellowstone National Park is the result of 3 massive europtions of the Yellow Stone Caldera, a massive Super Volcano right here in the US. So, this is why it makes sense to be seeing geothermal in these parts of the US. </p>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <h5>Solar US Map</h3>
+                                            <img class="d-block w-100 rounded" src="assets/img/p2/insights/SOLAR.png" alt="Solar Insight visual">
+                                            <p class="mb-5"><b>Insight 2:</b> In the above picture you can see the Solar energy sourced plants that are used here in the US. It was to be expected that California was satruated with Solar plants (I assumed this as it a somewhat dry southern state), then solar plants were sparsly disperced around the US, but the East coast had a larger concentration. I also found it interesting that North Carolina, New Jersey, and Massachusetts had large concentration of solar plants then the sourounding states. I found this interesting as I assumed solar would make sence more in the sunnier dryer states then wetter states, so I'm assuming that the drive for these Solar plants could be attributed to either the "larger" populations found in these states when compared to other states in otehr regions in the US or the political pull of these states to go "green." To Conclude, I think more research is needed to look into how the placements of these solar farms compare to the sun coverage during different seasons.</p>
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <h5>Wind US Map</h3>
+                                            <img class="d-block w-100 rounded" src="assets/img/p2/insights/WIND.png" alt="Wind Insight visual">
+                                            <p class="mb-5"><b>Insight 3:</b> In the above picture you can see the Wind energy sourced plants that are used here in the US. I found it to be expected that the Great Plains region had the majority of wind farms as the great planes are vastly "flat" so in my mind they would serve as good candidates for wind farms as the wind would be unabstructed by tall trees, but then again most wind farms are much bigger than your average tree so that invalidates my claim a bit. I did however find it interesting that most of the Southwest states did not have wind farms to generate electricity. And I also found it interesting that that was a large concentration of wind farms in upper Texas and Oklahoma. It was interesting becuase of the Polar Vortex Texas suffered a few weeks ago, in 2021. So, it makes me wonder how different the situation could have been in Tesax if they had meens of staring this wind energy by way of the Tesla Mega-Battery or other means. To Conclude, I think more research is needed to look into how the placements of these wind turbines compare to the wind patterns of different seasons in the US. </p>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <h3 class="text-secondary text-uppercase mb-0" id="portfolioModal1Label">Links</h3>
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-5"><b>1st link:</b> this will lead you to my GitHub Repository for this project.
+                                        <br><b>2nd link:</b> this will lead you to the homepage for the unprocessed dataset used for this project.
+                                        <br><b>3rd link:</b> this will lead you to the ShinyApps.io dashboard I made to visualize the dataset.
+                                        <br><b>4th link:</b> this will lead you to a YouTube narriated walkthrough of how to use the ShinyApps.io dashboard.</p>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Github repo link, data link, ShinyApps.io link, YouTube guideline link-->
+                                    <div>
+                                        <a class="btn btn-danger" href="https://github.com/mziminski/CS-424_Project-02" target="_blank" rel="noopener noreferrer">
+                                            <i class="fas fa-code-branch"></i>
+                                        </a>
+                                        <a class="btn btn-danger" href="https://www.epa.gov/egrid/download-data" target="_blank" rel="noopener noreferrer">
+                                            <i class="fas fa-database"></i>
+                                        </a>
+                                        <a class="btn btn-danger" href="https://mzimin2.shinyapps.io/CS-424_Project-02/" target="_blank" rel="noopener noreferrer">
+                                            <i class="fas fa-cloud"></i>
+                                        </a>
+                                        <a class="btn btn-danger" href="https://youtu.be/9C6GKHtJ-kQ4" target="_blank" rel="noopener noreferrer">
+                                            <i class="fab fa-youtube"></i>
+                                        </a>
+                                    </div>
+                                    <!-- Icon Divider-->
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                    </div>
                                     <button class="btn btn-danger" data-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
                                         Close Window
