@@ -4,6 +4,6 @@
     vertical-align:bottom;
   }
 
-  img {
+.img-fluid {
     border: 5px solid black;
   }
