@@ -3,3 +3,7 @@
     border-radius:50%;
     vertical-align:bottom;
   }
+
+  img {
+    border: 5px solid black;
+  }
