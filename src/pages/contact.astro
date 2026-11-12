@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+
+const description = 'Contact Matt Ziminski by email, GitHub, or LinkedIn. This page does not collect form data.';
+---
+
+<Base title="Contact" description={description} ogImage="/og/contact.png">
+  <div class="wrap page-intro">
+    <p class="kicker">Contact</p>
+    <div class="page-title">
+      <h1>Links, not a form.</h1>
+      <p>
+        Nothing on this page is submitted to a server I control. Email opens your mail client. The other two links leave the site.
+      </p>
+    </div>
+    <ul class="contact-list">
+      <li>
+        <a href={`mailto:${site.email}`}>
+          <span class="kicker">Email</span>
+          <strong>{site.email}</strong>
+          <span class="fine">Published on the previous version of this site. Confirm it in src/data/site.ts.</span>
+        </a>
+      </li>
+      <li>
+        <a href={site.github} rel="me noopener noreferrer">
+          <span class="kicker">GitHub</span>
+          <strong>{site.githubHandle}</strong>
+          <span class="fine">Opens in this tab. Profile and public repositories.</span>
+        </a>
+      </li>
+      <li>
+        <a href={site.linkedin} rel="me noopener noreferrer">
+          <span class="kicker">LinkedIn</span>
+          <strong>Matthew Ziminski</strong>
+          <span class="fine">Opens in this tab. Confirm the profile URL in src/data/site.ts.</span>
+        </a>
+      </li>
+    </ul>
+    <p class="fine" style="margin:1.25rem 0 3rem">
+      TODO(matt): if the UIC address is no longer the one you want, replace <code>email</code> in <code>src/data/site.ts</code>.
+    </p>
+  </div>
+</Base>

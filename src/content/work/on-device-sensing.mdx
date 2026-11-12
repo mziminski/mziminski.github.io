@@ -1,0 +1,49 @@
+---
+title: Sensor data that stays on the phone
+summary: A study of processing motion and health samples on-device, with export as an explicit act rather than the default.
+order: 5
+featured: false
+theme: Software
+stack:
+  - Swift
+  - On-device buffer
+  - Local store
+  - Confirmed export
+diagram: on-device-sensing
+# TODO(matt): add platform versions and a link only if you have a real prototype.
+timeframe: ""
+role: ""
+repository: ""
+---
+
+import Diagram from '../../components/Diagram.astro';
+
+## Problem
+
+Health and motion samples are sensitive, high-frequency, and easy to over-collect. A design that streams raw samples to a server “just in case” has already made the privacy decision, usually without writing it down. This study writes it down first.
+
+It is an iOS-shaped pipeline. It does not describe an app in the App Store, a clinical claim, or a device test. Those would be facts, and they are blank until they are real.
+
+## Architecture
+
+<Diagram name="on-device-sensing" />
+
+## Decisions and trade-offs
+
+Window on the device. Features such as a magnitude, a step count, or a short motion summary are computed in a buffer. Raw samples are not the API another layer is allowed to call. If a later version wants the raw window, that is a new design, not a flag on this one.
+
+The model or the rule runs on the device. A network call is not required to show a person their own summary. If the sample stream drops, the summary shows a gap. It does not invent values to keep a chart smooth. A smooth chart of missing data is a kind of lie.
+
+Export is a separate, confirmed action. Sync is not the default path of the buffer. If a later version uploads anything, it uploads features, with the version of the extractor, and only after a person turns it on. The confirmation is the product decision. The upload code is the easy part.
+
+Health-store permissions are requested for the specific types the summary needs, each with a sentence that says why. Nothing is requested “for later.” A permission you do not have a sentence for is a permission you do not ask for.
+
+On-device models are harder to update, and harder to evaluate, than a server model that sees every request. The design keeps a small labeled set of windows and runs it against device builds, so a regression is a failed build rather than a story from the field. That set has to be collected with consent and kept as carefully as the samples. This page does not pretend the set already exists. The trade-off is a thinner eval than a server team would boast about. It is also the eval you can actually run without collecting a warehouse of raw motion.
+
+## Stack
+
+Swift, a sensor buffer, an on-device model or a rule, a local store, and an export sheet. No backend is required for the first version, which is the point. Platform versions, entitlements, and a repository are front-matter fields. They stay empty until there is a build to point at.
+
+## Still open
+
+If you have prototyped this, add the sample types, the OS versions you ran, and a link. If you have not, leave the chips on the page. A blank is a better record than a fictional TestFlight.

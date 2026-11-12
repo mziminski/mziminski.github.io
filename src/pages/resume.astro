@@ -1,0 +1,36 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import Base from '../layouts/Base.astro';
+
+const resumePath = join(process.cwd(), 'public', 'resume.pdf');
+const hasResume = existsSync(resumePath);
+const description = hasResume
+  ? 'Resume for Matt Ziminski.'
+  : 'Resume placeholder. The PDF is not published yet.';
+---
+
+<Base title="Resume" description={description} ogImage="/og/resume.png">
+  <div class="wrap page-intro">
+    <p class="kicker">Resume</p>
+    <div class="page-title">
+      <h1>{hasResume ? 'Resume' : 'Resume file not published yet.'}</h1>
+    </div>
+    {
+      hasResume ? (
+        <p>
+          <a class="button" href="/resume.pdf">Download resume PDF</a>
+        </p>
+      ) : (
+        <div class="card" style="max-width:40rem;margin-top:1.25rem">
+          <p><span class="edit-me">Resume PDF · edit me</span></p>
+          <p style="margin-top:0.8rem">
+            There is no resume in this repository. Add <code>public/resume.pdf</code> and the download link replaces this card on the next build.
+            The placeholder is intentional: a missing file should not pretend to be a document.
+          </p>
+          <p class="fine" style="margin-top:0.7rem">TODO(matt): export a PDF you are willing to share, then drop it at <code>public/resume.pdf</code>.</p>
+        </div>
+      )
+    }
+  </div>
+</Base>

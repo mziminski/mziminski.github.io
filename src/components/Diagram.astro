@@ -1,0 +1,98 @@
+---
+import { diagramSize, diagrams, type DiagramName } from '../data/diagrams';
+
+interface Props {
+  name: DiagramName;
+}
+
+const { name } = Astro.props;
+const diagram = diagrams[name];
+if (!diagram) {
+  throw new Error(`Unknown diagram: ${name}`);
+}
+
+const { nodeWidth: w, nodeHeight: h } = diagramSize;
+const titleId = `diagram-title-${name}`;
+const descId = `diagram-desc-${name}`;
+const markerId = `arrow-${name}`;
+
+const byId = new Map(diagram.nodes.map((node) => [node.id, node]));
+
+function edgePath(fromId: string, toId: string) {
+  const a = byId.get(fromId);
+  const b = byId.get(toId);
+  if (!a || !b) return '';
+  const vertical = Math.abs(a.x - b.x) < 8;
+  if (vertical) {
+    const down = b.y > a.y;
+    const x1 = a.x + w / 2;
+    const y1 = down ? a.y + h : a.y;
+    const x2 = b.x + w / 2;
+    const y2 = down ? b.y : b.y + h;
+    const bend = down ? 22 : -22;
+    return `M ${x1} ${y1} C ${x1} ${y1 + bend}, ${x2} ${y2 - bend}, ${x2} ${y2}`;
+  }
+  const x1 = a.x + w;
+  const y1 = a.y + h / 2;
+  const x2 = b.x;
+  const y2 = b.y + h / 2;
+  const span = Math.max(28, (x2 - x1) / 2);
+  return `M ${x1} ${y1} C ${x1 + span} ${y1}, ${x2 - span} ${y2}, ${x2} ${y2}`;
+}
+---
+
+<figure class="diagram">
+  <div class="diagram-scroll" tabindex="0" role="region" aria-labelledby={titleId}>
+    <svg
+      viewBox={`0 0 ${diagramSize.width} ${diagramSize.height}`}
+      role="img"
+      aria-labelledby={`${titleId} ${descId}`}
+    >
+      <title id={titleId}>{diagram.title}</title>
+      <desc id={descId}>{diagram.steps.map((step) => step.title).join(', ')}</desc>
+      <defs>
+        <marker
+          id={markerId}
+          viewBox="0 0 10 10"
+          refX="9"
+          refY="5"
+          markerWidth="7"
+          markerHeight="7"
+          orient="auto-start-reverse"
+        >
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+        </marker>
+      </defs>
+      {
+        diagram.edges.map((edge) => (
+          <path
+            class="diagram-edge"
+            d={edgePath(edge.from, edge.to)}
+            marker-end={`url(#${markerId})`}
+          />
+        ))
+      }
+      {
+        diagram.nodes.map((node) => (
+          <g transform={`translate(${node.x} ${node.y})`}>
+            <rect class="diagram-node" width={w} height={h} rx="2"></rect>
+            <text class="diagram-index" x="14" y="24">{node.index}</text>
+            <text class="diagram-title" x="14" y="48">{node.title}</text>
+            <text class="diagram-line" x="14" y="70">{node.lines[0]}</text>
+            <text class="diagram-line" x="14" y="88">{node.lines[1]}</text>
+          </g>
+        ))
+      }
+    </svg>
+  </div>
+  <figcaption class="fine" style="margin-top:0.45rem">{diagram.caption}</figcaption>
+  <ol class="diagram-steps">
+    {
+      diagram.steps.map((step) => (
+        <li>
+          <strong>{step.title}.</strong> {step.text}
+        </li>
+      ))
+    }
+  </ol>
+</figure>

@@ -1,0 +1,82 @@
+{
+  "minimum": 95,
+  "summary": [
+    {
+      "name": "home-mobile",
+      "url": "http://127.0.0.1:4321/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "low": []
+    },
+    {
+      "name": "work-mobile",
+      "url": "http://127.0.0.1:4321/work/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "low": []
+    },
+    {
+      "name": "study-mobile",
+      "url": "http://127.0.0.1:4321/work/smoke-trails/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "low": []
+    },
+    {
+      "name": "about-mobile",
+      "url": "http://127.0.0.1:4321/about/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "low": []
+    },
+    {
+      "name": "notes-mobile",
+      "url": "http://127.0.0.1:4321/notes/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "low": []
+    },
+    {
+      "name": "contact-mobile",
+      "url": "http://127.0.0.1:4321/contact/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "low": []
+    },
+    {
+      "name": "home-desktop",
+      "url": "http://127.0.0.1:4321/",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "low": []
+    }
+  ]
+}

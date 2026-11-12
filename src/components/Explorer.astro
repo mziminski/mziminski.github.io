@@ -1,0 +1,195 @@
+---
+import {
+  densityLabel,
+  smoke,
+  smokeCount,
+  statusLabel,
+  trailCount,
+  trails,
+} from '../data/explorer';
+---
+
+<section class="section" aria-labelledby="explorer-title">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="kicker">Centerpiece</p>
+        <h2 id="explorer-title">A sample sheet for smoke and trails</h2>
+      </div>
+    </div>
+    <p class="disclaimer">
+      <strong>Demonstration only.</strong> The lines and plumes are made-up geometry on a real OpenStreetMap basemap.
+      This is not a live hazard feed or a trail report, and it is not for travel decisions.
+    </p>
+    <div class="explorer-layout">
+      <div>
+        <div class="map-stage" id="map-stage">
+          <div class="map-poster" id="map-poster" aria-hidden="true">
+            <svg viewBox="0 0 360 280" fill="none">
+              <rect x="8" y="8" width="344" height="264" stroke="currentColor"></rect>
+              <path d="M28 28h18M28 28v18M332 28h-18M332 28v18M28 252h18M28 252v-18M332 252h-18M332 252v-18" stroke="currentColor"></path>
+              <path d="M40 210 C 90 180, 140 200, 190 150 S 300 90, 330 70" stroke="currentColor" stroke-width="3"></path>
+              <path d="M50 90 C 110 120, 150 80, 210 110" stroke="currentColor" stroke-width="3" stroke-dasharray="7 5"></path>
+              <path d="M230 150 C 260 170, 280 150, 300 180" stroke="currentColor" stroke-width="3" stroke-dasharray="2 4"></path>
+              <path d="M70 130 h90 l20 40 h-70 z" fill="currentColor" opacity="0.08" stroke="currentColor"></path>
+              <path d="M200 70 h80 v50 h-60 z" fill="currentColor" opacity="0.12" stroke="currentColor" stroke-dasharray="3 3"></path>
+              <text x="24" y="40" fill="currentColor" font-family="ui-monospace, monospace" font-size="11">SAMPLE SHEET</text>
+              <text x="24" y="246" fill="currentColor" font-family="ui-monospace, monospace" font-size="11">NOT A LIVE FEED</text>
+            </svg>
+          </div>
+          <div id="map" class="map-canvas" hidden></div>
+          <button id="load-map" class="map-load" type="button">Load the interactive map</button>
+        </div>
+        <p id="map-error" class="fine" hidden role="status" style="margin-top:0.5rem"></p>
+        <p class="fine" style="margin-top:0.55rem">
+          Basemap © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, via
+          <a href="https://openfreemap.org/">OpenFreeMap</a>. Overlay geometry is sample data shipped with this site.
+          The map library loads only after you ask for it.
+        </p>
+      </div>
+      <div class="explorer-panel">
+        <fieldset class="filters">
+          <legend>Show in the list</legend>
+          <label><input type="checkbox" name="overlay" value="trails" checked /> Trails</label>
+          <label><input type="checkbox" name="status" value="open" checked /> Open, solid line</label>
+          <label><input type="checkbox" name="status" value="caution" checked /> Caution, dashed line</label>
+          <label><input type="checkbox" name="status" value="closed" checked /> Closed, dotted line</label>
+          <label><input type="checkbox" name="overlay" value="smoke" checked /> Smoke plumes</label>
+        </fieldset>
+        <ul class="legend" aria-label="Legend">
+          <li><span class="swatch swatch-open" aria-hidden="true"></span> Open</li>
+          <li><span class="swatch swatch-caution" aria-hidden="true"></span> Caution</li>
+          <li><span class="swatch swatch-closed" aria-hidden="true"></span> Closed</li>
+          <li><span class="swatch swatch-light" aria-hidden="true"></span> Light</li>
+          <li><span class="swatch swatch-moderate" aria-hidden="true"></span> Moderate</li>
+          <li><span class="swatch swatch-heavy" aria-hidden="true"></span> Heavy</li>
+        </ul>
+        <p id="feature-count" aria-live="polite">
+          {trailCount} trails and {smokeCount} smoke polygons in the sample.
+        </p>
+        <ul class="feature-list" tabindex="0" aria-label="Sample features">
+          {
+            trails.features.map((feature) => (
+              <li data-kind="trail" data-status={feature.properties.status} data-feature={feature.id}>
+                <button type="button" data-focus={feature.id} aria-pressed="false">
+                  <span class="feature-name">{feature.properties.name}</span>
+                  <span class="feature-meta">
+                    <span class={`swatch swatch-${feature.properties.status}`} aria-hidden="true"></span>
+                    Trail · {statusLabel[feature.properties.status]}
+                  </span>
+                  <span class="feature-note">{feature.properties.note}</span>
+                </button>
+              </li>
+            ))
+          }
+          {
+            smoke.features.map((feature) => (
+              <li data-kind="smoke" data-feature={feature.id}>
+                <button type="button" data-focus={feature.id} aria-pressed="false">
+                  <span class="feature-name">{feature.properties.name}</span>
+                  <span class="feature-meta">
+                    <span class={`swatch swatch-${feature.properties.density}`} aria-hidden="true"></span>
+                    Smoke · {densityLabel[feature.properties.density]}
+                  </span>
+                  <span class="feature-note">{feature.properties.note}</span>
+                </button>
+              </li>
+            ))
+          }
+        </ul>
+        <noscript>
+          <p class="fine">JavaScript is off, so the filters and the map stay inactive. The list above is the full sample.</p>
+        </noscript>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function selectedStatuses() {
+    return [...document.querySelectorAll<HTMLInputElement>('input[name="status"]:checked')].map((input) => input.value);
+  }
+
+  function overlayOn(name: string) {
+    return document.querySelector<HTMLInputElement>(`input[name="overlay"][value="${name}"]`)?.checked ?? false;
+  }
+
+  function applyList() {
+    const statuses = selectedStatuses();
+    const trailsOn = overlayOn('trails');
+    const smokeOn = overlayOn('smoke');
+    let trailsShown = 0;
+    let smokeShown = 0;
+    document.querySelectorAll<HTMLElement>('.feature-list li').forEach((item) => {
+      const kind = item.dataset.kind;
+      let show = false;
+      if (kind === 'trail') {
+        show = trailsOn && statuses.includes(item.dataset.status ?? '');
+        if (show) trailsShown += 1;
+      } else if (kind === 'smoke') {
+        show = smokeOn;
+        if (show) smokeShown += 1;
+      }
+      item.hidden = !show;
+    });
+    const count = document.querySelector('#feature-count');
+    if (count) {
+      count.textContent = `Showing ${trailsShown} of 6 trails and ${smokeShown} of 3 smoke polygons.`;
+    }
+  }
+
+  document.querySelectorAll<HTMLInputElement>('.filters input').forEach((input) => {
+    input.addEventListener('change', () => {
+      applyList();
+      const api = window.__mzExplorer;
+      api?.applyFilters({
+        trails: overlayOn('trails'),
+        smoke: overlayOn('smoke'),
+        statuses: selectedStatuses(),
+      });
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-focus]').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>('[data-focus]').forEach((other) => {
+        other.setAttribute('aria-pressed', other === button ? 'true' : 'false');
+      });
+      window.__mzExplorer?.focus(button.dataset.focus ?? '', reduceMotion);
+    });
+  });
+
+  const load = document.querySelector<HTMLButtonElement>('#load-map');
+  load?.addEventListener('click', async () => {
+    const stage = document.querySelector('#map-stage');
+    const error = document.querySelector<HTMLElement>('#map-error');
+    if (!load || !stage) return;
+    load.disabled = true;
+    load.textContent = 'Loading map…';
+    stage.setAttribute('aria-busy', 'true');
+    try {
+      const { mountExplorer } = await import('../scripts/explorer');
+      await mountExplorer({
+        trails: overlayOn('trails'),
+        smoke: overlayOn('smoke'),
+        statuses: selectedStatuses(),
+        reduceMotion,
+      });
+      document.querySelector('#map-poster')?.setAttribute('hidden', '');
+      document.querySelector('#map')?.removeAttribute('hidden');
+      load.remove();
+      if (error) error.hidden = true;
+    } catch {
+      load.disabled = false;
+      load.textContent = 'Try loading the map again';
+      if (error) {
+        error.hidden = false;
+        error.textContent = 'The basemap did not load. The sample list is still the record of this demo.';
+      }
+    } finally {
+      stage.removeAttribute('aria-busy');
+    }
+  });
+</script>

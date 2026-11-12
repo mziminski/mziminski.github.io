@@ -1,0 +1,116 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+
+const description = 'About Matt Ziminski: geospatial systems, software engineering, and AI systems engineering, without a fake scorecard.';
+---
+
+<Base title="About" description={description} ogImage="/og/about.png">
+  <div class="wrap page-intro">
+    <p class="kicker">About</p>
+    <div class="page-title">
+      <h1>A practice in three directions.</h1>
+    </div>
+    <div class="prose">
+      <p>
+        I studied computer science at the {site.education.school} and finished a B.S. and an M.S. on {site.education.graduated}.
+        The site that used to live here was a course portfolio from that period. This one replaces it.
+      </p>
+      <p>
+        I work at the intersection of geospatial systems, software engineering, and AI systems engineering.
+        By AI systems engineering I mean the systems around a model: evaluation, observability, and the data pipelines that feed it.
+        I am not naming an employer on this page. That line stays blank until it is a fact I choose to publish.
+      </p>
+      {site.location ? <p>{site.location}</p> : <p><span class="edit-me">Location · edit me</span></p>}
+    </div>
+  </div>
+
+  <section class="section" aria-labelledby="education-title">
+    <div class="wrap split">
+      <div class="card">
+        <h2 id="education-title">Education</h2>
+        <p><strong>{site.education.school}</strong></p>
+        <p>{site.education.credential}</p>
+        <p>{site.education.graduated}</p>
+        <p class="fine" style="margin-top:0.7rem">
+          The degree line is carried from the previous version of this site. Change the wording in <code>src/data/site.ts</code> if it should read differently.
+        </p>
+      </div>
+      <div class="card">
+        <h2>What this page will not do</h2>
+        <p>
+          It will not score my skills out of ten, list awards, or quote a testimonial. Those are easy to invent and useless when they are.
+          The matrix below is a point of view about the work, not a claim of years or rank.
+        </p>
+        <p style="margin-top:0.7rem"><span class="edit-me">Credentials · edit me</span></p>
+        <p class="fine" style="margin-top:0.45rem">Add any credential you want listed by editing this page. Nothing is implied by the blank.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="matrix-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="matrix-title">Systems × AI × geospatial</h2>
+      </div>
+      <div class="matrix-wrap">
+        <table class="matrix">
+          <caption>How the three areas show up in the same system. Read across a row.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Concern</th>
+              <th scope="col">Geospatial</th>
+              <th scope="col">AI systems</th>
+              <th scope="col">Software engineering</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Data</th>
+              <td>Features, rasters, tiles, and the metadata that says where and when.</td>
+              <td>Prompts, traces, eval sets, and the documents a model is allowed to see.</td>
+              <td>Schemas, contracts, and the events a service actually emits.</td>
+            </tr>
+            <tr>
+              <th scope="row">Runtime</th>
+              <td>Projection, tiling, and spatial joins on a schedule you can explain.</td>
+              <td>Tool routing, timeouts, and a gate in front of any side effect.</td>
+              <td>Deploys you can roll back, and backpressure when a dependency stalls.</td>
+            </tr>
+            <tr>
+              <th scope="row">Quality</th>
+              <td>Invalid geometry, slivers, and joins that silently drop a place.</td>
+              <td>Scorers, a regression set, and a person on the decisions that leave the system.</td>
+              <td>Tests at the boundary, plus the page you open when something pages you.</td>
+            </tr>
+            <tr>
+              <th scope="row">Interfaces</th>
+              <td>A map and a list that say the same thing, including when the map fails.</td>
+              <td>A review queue. A model does not post straight to production.</td>
+              <td>Pages and APIs that stay usable without the decoration.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="earlier-title">
+    <div class="wrap prose">
+      <h2 id="earlier-title">Earlier public repositories</h2>
+      <p>
+        These are student-era projects. They are not the studies in the work section. I link them so the record is continuous, not so they have to carry the site.
+      </p>
+      <ul>
+        {
+          site.earlierWork.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+              — {item.note}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>

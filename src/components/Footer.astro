@@ -1,0 +1,24 @@
+---
+import { nav, site } from '../data/site';
+const year = 2026;
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <p class="serif" style="font-size:1.4rem">{site.name}</p>
+      <p class="fine" style="margin-top:0.4rem;max-width:46ch">
+        Showcase studies on this site are system designs for the portfolio. They are not a record of an employer, a client, or a measured result.
+      </p>
+    </div>
+    <div>
+      <ul class="footer-nav">
+        {nav.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+        <li><a href="/rss.xml">Notes feed</a></li>
+      </ul>
+      <p class="fine" style="margin-top:0.8rem">© {year} {site.name}</p>
+    </div>
+  </div>
+</footer>

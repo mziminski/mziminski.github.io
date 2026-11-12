@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+      - name: Locate Chrome
+        id: chrome
+        run: |
+          path="$(command -v google-chrome || command -v google-chrome-stable)"
+          test -n "$path"
+          echo "path=$path" >> "$GITHUB_OUTPUT"
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run check
+      - name: Contrast
+        run: node scripts/check-contrast.mjs
+      - name: Build
+        run: npm run build
+      - name: Links
+        run: npm run check:links
+      - name: Serve and audit
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.path }}
+        run: |
+          node scripts/serve.mjs &
+          for _ in $(seq 1 30); do
+            curl -sf http://127.0.0.1:4321/ >/dev/null && break
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:4321/ >/dev/null
+          npm run check:a11y
+          npm run check:lighthouse

@@ -1,0 +1,47 @@
+---
+title: A spatial pipeline you can see failing
+summary: Row counts do not tell you that a join dropped a county. This design puts geometry checks and freshness next to the publish step.
+order: 3
+featured: true
+theme: Geospatial
+stack:
+  - Object storage
+  - Schema and geometry checks
+  - Versioned publish
+  - Run dashboard
+diagram: spatial-pipeline
+# TODO(matt): name the dataset, the CRS, and a real dashboard if one exists.
+timeframe: ""
+role: ""
+repository: ""
+---
+
+import Diagram from '../../components/Diagram.astro';
+
+## Problem
+
+Spatial data fails in ways a tabular monitor will call healthy. A file arrives on time, the row count matches, and the geometries are in the wrong CRS, self-intersecting, or shifted by a few kilometers. The map is then quietly wrong. The person who notices is the one standing in the place the map described.
+
+## Architecture
+
+<Diagram name="spatial-pipeline" />
+
+## Decisions and trade-offs
+
+Geometry is its own step. Invalid, empty, and out-of-bounds features get their own counts. A pipeline that “mostly” parses still publishes the number of features it refused. Hiding that number inside a logged warning is how a bad file becomes a normal Tuesday.
+
+Publish is versioned. The dashboard shows which version is live, when it was built, and how fresh the source was at the time. “Green” without a timestamp is not a status. Overwriting the live version in place makes the previous good output unreachable, so the design does not do that.
+
+A golden area is checked every run: a small set of features with known ids, extents, and attributes. If that area moves and nobody changed the rule, the run stops before publish. The trade-off is real. A stale golden area delays a good update. Updating the golden area is an explicit change, so the delay has a name and a person.
+
+Alerts fire on the absence of a run, not only on an exception. A schedule that did not start is the failure mode cron is good at hiding. The dashboard treats a missing run as a page, with the same seriousness as a crash.
+
+The home-page map is not this dashboard. It is a separate, labeled sample. Mixing the two would make a demo look like an operational system.
+
+## Stack
+
+Landed files sit in object storage. A validator covers schema and geometry. A transform reprojects and writes a versioned dataset. A small dashboard reads the run record. The specific warehouse, the CRS you standardize on, and the tile format are blanks. They belong in the front matter when they are chosen for a real pipeline, not invented for a portfolio.
+
+## Still open
+
+Name the datasets and the CRS if this study should describe a pipeline you run. Leave the fields blank if it should stay a design. Either choice is more honest than a fabricated lag number.

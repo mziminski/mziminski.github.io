@@ -1,0 +1,47 @@
+---
+title: Feedback, then a person, then an issue
+summary: A model can draft a GitHub issue from a note. The design does not let it open one.
+order: 4
+featured: false
+theme: AI systems
+stack:
+  - Redaction step
+  - Fixed label set
+  - Admin queue
+  - Least-privilege GitHub token
+diagram: feedback-triage
+# TODO(matt): point this at a real repository and label set only if you use one.
+timeframe: ""
+role: ""
+repository: ""
+---
+
+import Diagram from '../../components/Diagram.astro';
+
+## Problem
+
+Feedback arrives as a sentence, sometimes a description of a screenshot, and a mood. Turning that into a tracker issue by hand is slow. Turning it into a tracker issue automatically is how a model files a duplicate, leaks a private detail, or assigns a priority nobody asked for. The slow version is the one that should ship first.
+
+## Architecture
+
+<Diagram name="feedback-triage" />
+
+## Decisions and trade-offs
+
+Redact before classify. The text that reaches the model has already passed through a strip for emails, tokens, and phone-shaped strings. The original is kept for the reviewer. It is not the default prompt. A reviewer who needs the raw note opens it on purpose.
+
+The model drafts a title, a suspected area, and a reason. It does not set a priority that pages someone. Priority is a human decision because the cost of being wrong is a person’s attention, not a token.
+
+Admin approval is the only path to the GitHub API. The actions are edit, reject, and approve. Approve is the write. A timeout does not approve, and a retry of the model does not approve. The queue is slower than auto-file. That slowness is the feature. The design is for a volume a person can still read. If the queue grows past that, the answer is a sharper filter or another reviewer, not a quieter model.
+
+Duplicates are a suggestion. The draft can point at an open issue. A person decides whether to comment on it or to open a new one. Automatic merge is how two unrelated notes become one confused thread.
+
+The eval habit matches the agent study. A labeled set of past notes is scored for the area, and for whether the draft leaked something the redactor should have caught. The question is whether a reviewer would trust the draft, not whether the demo sounded fluent. This page does not invent a precision number for a set that is not here.
+
+## Stack
+
+A notes inbox, a redaction step, a classifier with a fixed label set, a draft view, and a GitHub write that only the approval action can call. The token’s permissions are the minimum required to open an issue in one repository. No admin scope, no access to other repos, no ability for the model process to hold the token.
+
+## Still open
+
+The repository field is blank. Point it at a real repo only when the token story above is the one you use. Replace the label set in the prose when you have one. Do not add a metric until you have measured it.

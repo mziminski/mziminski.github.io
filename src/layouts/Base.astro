@@ -1,0 +1,118 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const { title, description, ogImage = '/og/home.png', noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const image = new URL(ogImage, Astro.site);
+const documentTitle = title === site.name ? `${site.name} — Geospatial, software, and AI systems` : `${title} — ${site.name}`;
+const imageAlt = `${documentTitle}. Personal site of Matt Ziminski.`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>
+      (() => {
+        const key = 'mz-theme';
+        let stored = null;
+        try { stored = localStorage.getItem(key); } catch (error) { stored = null; }
+        const theme = stored === 'light' || stored === 'dark'
+          ? stored
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{documentTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
+    <meta name="author" content={site.name} />
+    <meta name="theme-color" content="#f3efe4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12110f" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={image.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={documentTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image.href} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Notes by Matt Ziminski" href="/rss.xml" />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <Header />
+    <main id="content" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const key = 'mz-theme';
+        const toggle = document.querySelector('[data-theme-toggle]');
+        const label = document.querySelector('[data-theme-label]');
+        const nav = document.querySelector('#site-nav');
+        const navButton = document.querySelector('[data-nav-toggle]');
+
+        const syncTheme = () => {
+          const dark = root.dataset.theme === 'dark';
+          if (toggle) toggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
+          if (label) label.textContent = dark ? 'Night' : 'Day';
+        };
+        syncTheme();
+
+        toggle?.addEventListener('click', () => {
+          const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try { localStorage.setItem(key, next); } catch (error) { /* private mode */ }
+          syncTheme();
+        });
+
+        const setOpen = (open) => {
+          if (!nav || !navButton) return;
+          const wasOpen = nav.dataset.open === 'true';
+          nav.dataset.open = open ? 'true' : 'false';
+          navButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+          if (!open && wasOpen && navButton.offsetParent !== null) navButton.focus();
+        };
+
+        navButton?.addEventListener('click', () => {
+          setOpen(nav?.dataset.open !== 'true');
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && nav?.dataset.open === 'true') setOpen(false);
+        });
+
+        nav?.querySelectorAll('a').forEach((link) => {
+          link.addEventListener('click', () => setOpen(false));
+        });
+      })();
+    </script>
+  </body>
+</html>
