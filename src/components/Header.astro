@@ -1,0 +1,43 @@
+---
+import Mark from './Mark.astro';
+import { isActive, nav, site } from '../data/site';
+
+const path = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="wrap header-bar">
+    <a class="wordmark" href="/">
+      <Mark />
+      <span>{site.name}</span>
+    </a>
+    <nav id="site-nav" class="site-nav" data-open="false" aria-label="Primary">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isActive(item.href, path) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button
+        class="nav-toggle"
+        type="button"
+        data-nav-toggle
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        Menu
+      </button>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+        <span class="kicker">Theme</span>
+        <span data-theme-label>Day</span>
+      </button>
+    </div>
+  </div>
+</header>

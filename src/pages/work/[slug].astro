@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const studies = await getCollection('work');
+  return studies.map((study) => ({
+    params: { slug: study.id },
+    props: { study },
+  }));
+}
+
+const { study } = Astro.props;
+const { Content } = await render(study);
+const repository = study.data.repository.startsWith('https://') ? study.data.repository : '';
+---
+
+<Base
+  title={study.data.title}
+  description={study.data.summary}
+  ogImage={`/og/work-${study.id}.png`}
+>
+  <article class="wrap page-intro">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/work/">Work</a></li>
+        <li aria-current="page">{study.data.title}</li>
+      </ol>
+    </nav>
+    <p class="kicker">{study.data.theme}</p>
+    <div class="page-title">
+      <h1>{study.data.title}</h1>
+      <p>{study.data.summary}</p>
+    </div>
+    <ul class="stack" aria-label="Stack">
+      {study.data.stack.map((item) => <li>{item}</li>)}
+    </ul>
+    <p class="meta-row">
+      {
+        study.data.role
+          ? <span>{study.data.role}</span>
+          : <span class="edit-me">Role · edit me</span>
+      }
+      {' · '}
+      {
+        study.data.timeframe
+          ? <span>{study.data.timeframe}</span>
+          : <span class="edit-me">Timeframe · edit me</span>
+      }
+      {' · '}
+      {
+        repository
+          ? <a href={repository}>Repository <span class="visually-hidden">(opens in a new tab)</span></a>
+          : <span class="edit-me">Repository · edit me</span>
+      }
+    </p>
+    <aside class="study-banner">
+      <p>
+        <strong>Showcase study.</strong> This page is a system design for the portfolio. It does not claim a production launch, an employer, a client, or a measured result. Fields marked “edit me” are blanks in the source, left for Matt to fill with facts he can stand behind.
+      </p>
+    </aside>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>

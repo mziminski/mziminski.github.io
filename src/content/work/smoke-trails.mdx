@@ -1,0 +1,49 @@
+---
+title: Smoke × Trails
+summary: A sample explorer that joins smoke polygons to trail segments and states the condition in a map and in a list.
+order: 1
+featured: true
+theme: Geospatial
+stack:
+  - MapLibre GL
+  - OpenFreeMap
+  - GeoJSON
+  - Static UI
+diagram: smoke-trails
+# TODO(matt): timeframe, role, and repository stay blank until this study points at real work.
+timeframe: ""
+role: ""
+repository: ""
+---
+
+import Diagram from '../../components/Diagram.astro';
+
+## Problem
+
+Someone looking at a trail wants one question answered: does this piece of it sit in the smoke, and what should that mean. A state-wide choropleth does not answer it. A pin with no sentence does not answer it either. The useful object is the segment, with a condition a person can read without trusting the map.
+
+This study designs that object. The sample on the home page is the interface: made-up lines and plumes on a real basemap. It is not a live hazard feed, and the page says so in text, not only in a color.
+
+## Architecture
+
+<Diagram name="smoke-trails" />
+
+## Decisions and trade-offs
+
+The segment is the unit, not the trail’s name. A long trail crosses in and out of a plume. One status for the whole name hides the part that matters, so the design splits the line where the overlap changes.
+
+The list is the record. The map is a view of the same features. Filters change both, and they change the list even if the basemap never loads. That is deliberate. A WebGL view is a poor place to hide the only copy of the answer.
+
+The condition is a rule, not a score. Overlap length and a density class map to open, caution, or closed through thresholds a person can edit. A model can propose a threshold later. It does not get to invent a status the rule cannot explain. The trade-off is coarseness. A forecaster’s judgment is finer than three words. The first version would rather be argued with than hidden.
+
+Color is not the status. Open, caution, and closed also differ by line pattern and by the words in the list. A legend that is only a set of hues fails the moment the hues are hard to tell apart, and it fails in grayscale.
+
+Sample data stays labeled as sample data. A portfolio demo that looks like a warning is a safety problem. The home page says, next to the map, that it must not be used for travel decisions.
+
+## Stack
+
+The sample you can load is MapLibre GL on OpenFreeMap tiles, with GeoJSON shipped in the site. The library is fetched only after a click, so the home page does not pay for it up front. A production version of the same design would add a scheduled ingest, a geometry check, and a log of which rule version wrote each status. Those pieces are the subject of the spatial pipeline study. They are not running here.
+
+## Still open
+
+The timeframe, the role, and a repository link are blank in the front matter of this file. Replace the sample thresholds if you have ones you are willing to defend, and replace the geometry if you have data you have the right to publish. Until then the banner at the top of the page stays accurate.

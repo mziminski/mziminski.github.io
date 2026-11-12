@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const studies = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const description = 'Case studies in geospatial systems, evaluated AI systems, and the software that has to run them.';
+---
+
+<Base title="Work" description={description} ogImage="/og/work.png">
+  <div class="wrap page-intro">
+    <p class="kicker">Work</p>
+    <div class="page-title">
+      <h1>Studies, not a client list.</h1>
+      <p>
+        Five system designs in the areas I work in. Each one is a showcase study: the problem, the architecture, the decisions, and the stack.
+        Empty fields are left open on purpose. None of these pages names an employer or a measured outcome.
+      </p>
+    </div>
+  </div>
+  <div class="wrap" style="padding-bottom:3rem">
+    <div class="work-list">
+      {
+        studies.map((study) => (
+          <a class="work-row" href={`/work/${study.id}/`}>
+            <span class="work-index">{String(study.data.order).padStart(2, '0')}</span>
+            <span>
+              <span class="work-title">{study.data.title}</span>
+              <span class="work-summary">{study.data.summary}</span>
+              <ul class="stack">
+                {study.data.stack.map((item) => <li>{item}</li>)}
+              </ul>
+            </span>
+            <span class="work-theme">{study.data.theme}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,132 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Explorer from '../components/Explorer.astro';
+import { site } from '../data/site';
+import { formatDate } from '../lib/format';
+
+const studies = (await getCollection('work')).sort((a, b) => a.data.order - b.data.order);
+const featured = studies.filter((study) => study.data.featured);
+const rest = studies.filter((study) => !study.data.featured);
+const notes = (await getCollection('notes')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  jobTitle: site.role,
+  email: `mailto:${site.email}`,
+  alumniOf: {
+    '@type': 'CollegeOrUniversity',
+    name: site.education.school,
+  },
+  sameAs: [site.github, site.linkedin],
+  knowsAbout: ['Geospatial systems', 'AI systems engineering', 'Software engineering'],
+};
+---
+
+<Base title={site.name} description={site.description} ogImage="/og/home.png">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(person)} />
+  <div class="wrap hero">
+    <div>
+      <p class="kicker">Geospatial · Software · AI systems</p>
+      <h1>Maps, models, and the systems between them.</h1>
+      <p class="lede">
+        I’m {site.name}, a software engineer working where geospatial systems, software engineering, and AI systems engineering meet.
+        The work I care about is the part that has to keep running: pipelines you can observe, models you are willing to evaluate, and interfaces that still make sense when the data is spatial.
+      </p>
+      <div class="actions">
+        <a class="button" href="/work/">Selected work</a>
+        <a class="button secondary" href="/contact/">Contact</a>
+      </div>
+    </div>
+    <aside class="plate" aria-label="Three parts of the practice">
+      <p class="kicker">Field plate</p>
+      <ol>
+        <li>
+          <span>01</span>
+          <div>
+            <strong>Geospatial</strong>
+            <small>Features, tiles, and conditions that stay attached to a place.</small>
+          </div>
+        </li>
+        <li>
+          <span>02</span>
+          <div>
+            <strong>Software</strong>
+            <small>Interfaces, contracts, and a path to see a system fail.</small>
+          </div>
+        </li>
+        <li>
+          <span>03</span>
+          <div>
+            <strong>AI systems</strong>
+            <small>Traces, evals, and a person on any write that matters.</small>
+          </div>
+        </li>
+      </ol>
+    </aside>
+  </div>
+
+  <section class="section" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="work-title">Selected work</h2>
+        <a href="/work/">All studies</a>
+      </div>
+      <div class="work-list">
+        {
+          featured.map((study, index) => (
+            <a class="work-row" href={`/work/${study.id}/`}>
+              <span class="work-index">{String(index + 1).padStart(2, '0')}</span>
+              <span>
+                <span class="work-title">{study.data.title}</span>
+                <span class="work-summary">{study.data.summary}</span>
+              </span>
+              <span class="work-theme">{study.data.theme}</span>
+            </a>
+          ))
+        }
+      </div>
+      <h3 class="serif" style="font-size:1.35rem;margin:1.6rem 0 0.4rem">Also on the bench</h3>
+      <div class="work-list">
+        {
+          rest.map((study) => (
+            <a class="work-row compact" href={`/work/${study.id}/`}>
+              <span class="work-index">{String(study.data.order).padStart(2, '0')}</span>
+              <span>
+                <span class="work-title">{study.data.title}</span>
+                <span class="work-summary">{study.data.summary}</span>
+              </span>
+              <span class="work-theme">{study.data.theme}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Explorer />
+
+  <section class="section" aria-labelledby="notes-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="notes-title">Notes</h2>
+        <a href="/notes/">All notes</a>
+      </div>
+      <div class="note-list">
+        {
+          notes.map((note) => (
+            <a class="note-card" href={`/notes/${note.id}/`}>
+              {note.data.draft && <span class="draft-pill">Draft</span>}
+              <h3 class="serif" style="font-size:1.7rem;margin:0.35rem 0">{note.data.title}</h3>
+              <p class="fine">{formatDate(note.data.date)} · Sample draft</p>
+              <p style="margin-top:0.35rem">{note.data.description}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

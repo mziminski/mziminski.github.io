@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate } from '../../lib/format';
+
+const notes = (await getCollection('notes')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const description = 'Draft notes on geospatial systems, software, and AI systems engineering.';
+---
+
+<Base title="Notes" description={description} ogImage="/og/notes.png">
+  <div class="wrap page-intro">
+    <p class="kicker">Notes</p>
+    <div class="page-title">
+      <h1>Short drafts, labeled as drafts.</h1>
+      <p>
+        Two sample notes, written for this site and marked draft until they are edited into something worth keeping.
+        Drafts are left out of the sitemap and marked <code>noindex</code>. The feed still lists them, with a draft prefix, so the feed is not empty.
+      </p>
+      <p style="margin-top:0.8rem"><a href="/rss.xml">Subscribe via RSS</a></p>
+    </div>
+    <div class="note-list" style="margin-top:1.5rem;padding-bottom:3rem">
+      {
+        notes.map((note) => (
+          <a class="note-card" href={`/notes/${note.id}/`}>
+            {note.data.draft && <span class="draft-pill">Draft</span>}
+            <h2>{note.data.title}</h2>
+            <p class="fine">{formatDate(note.data.date)} · Sample draft</p>
+            <p style="margin-top:0.4rem">{note.data.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Base>

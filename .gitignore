@@ -1,25 +1,28 @@
-# Folder view configuration files
+# OS / editor
 **/.DS_Store
 Desktop.ini
-
-# Thumbnail cache files
 ._*
 Thumbs.db
-
-# Files that might appear on external disks
 .Spotlight-V100
 .Trashes
-
-# Compiled Python files
-*.pyc
-
-# Compiled C++ files
-*.out
-
-# Application specific files
-venv
-node_modules
-.sass-cache
-
-# VS Code
 .vscode
+.idea
+
+# Python
+*.pyc
+venv
+
+# Node / Astro
+node_modules
+dist
+.astro
+
+# Generated at prebuild (see scripts/generate-og.mjs)
+public/og/
+public/favicon-32.png
+public/favicon.ico
+public/apple-touch-icon.png
+public/maplibre-gl-worker.js
+
+# Local lighthouse output
+.tmp/

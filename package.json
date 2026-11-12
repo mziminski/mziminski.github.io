@@ -1,0 +1,40 @@
+{
+  "name": "mziminski-site",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Personal site of Matt Ziminski. Static Astro build for GitHub Pages.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.19"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "node scripts/generate-og.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "check:links": "node scripts/check-links.mjs",
+    "check:a11y": "node scripts/audit-a11y.mjs",
+    "check:lighthouse": "node scripts/audit-lighthouse.mjs",
+    "serve": "node scripts/serve.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.1.5",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/source-sans-3": "^5.3.1",
+    "@fontsource/source-serif-4": "^5.3.1",
+    "astro": "^7.4.11",
+    "maplibre-gl": "^6.18.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "axe-core": "^4.14.0",
+    "lighthouse": "^13.6.0",
+    "puppeteer-core": "^25.17.0",
+    "sharp": "^0.35.5",
+    "typescript": "^5.9.3"
+  }
+}

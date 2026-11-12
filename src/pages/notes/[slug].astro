@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((note) => ({
+    params: { slug: note.id },
+    props: { note },
+  }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+---
+
+<Base
+  title={note.data.draft ? `[Draft] ${note.data.title}` : note.data.title}
+  description={note.data.description}
+  ogImage={`/og/note-${note.id}.png`}
+  noindex={note.data.draft}
+>
+  <article class="wrap page-intro">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/notes/">Notes</a></li>
+        <li aria-current="page">{note.data.title}</li>
+      </ol>
+    </nav>
+    {note.data.draft && <p class="draft-pill">Draft</p>}
+    <div class="page-title">
+      <h1>{note.data.title}</h1>
+      <p class="fine">{formatDate(note.data.date)} · Sample draft written for this site</p>
+    </div>
+    <aside class="draft-banner">
+      <p>
+        <strong>Sample draft.</strong> This note was written as a placeholder for the rebuilt site. Edit or replace it before treating it as a published essay. The source is <code>src/content/notes/{note.id}.md</code>.
+      </p>
+    </aside>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>

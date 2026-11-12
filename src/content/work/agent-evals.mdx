@@ -1,0 +1,47 @@
+---
+title: An eval gate for tool-using agents
+summary: Orchestration is the easy drawing. The design that matters is the harness that decides whether a new agent is allowed to act.
+order: 2
+featured: true
+theme: AI systems
+stack:
+  - Typed tool router
+  - Trace log
+  - Replayable cases
+  - Fail-closed gate
+diagram: agent-evals
+# TODO(matt): link a real harness here if you have one you can describe.
+timeframe: ""
+role: ""
+repository: ""
+---
+
+import Diagram from '../../components/Diagram.astro';
+
+## Problem
+
+A planner that can call tools will look fine on a happy path and then file the wrong thing, loop, or spend its budget on a tool that already timed out. The system to design first is the one that can reject a change. Fluency is not a release criterion.
+
+## Architecture
+
+<Diagram name="agent-evals" />
+
+## Decisions and trade-offs
+
+Traces are part of the product. A score without the tool calls that produced it is not reviewable, so every router call lands in a log with its inputs, its output, and the time it took. The log is what a person reads when a case fails. It is not a debug leftover you hope is still on disk.
+
+The eval set is small and owned. Adding a case is a deliberate change. A sample of production logs can suggest a case. It does not silently become the set. The trade-off is obvious: a small set will miss the next failure. The design prefers a miss you can see over a large set nobody maintains. New failures become cases after someone looks at a trace.
+
+Trajectory checks sit next to outcome checks. An agent that writes a correct sentence after calling a tool it was not allowed to call fails the case. Matching the final text is not enough when the path was wrong.
+
+The gate fails closed. If the eval run errors, or a score is missing, the candidate does not advance. A green dashboard with a hole in it is a pass only if someone is careless.
+
+Humans stay on the write path. The agent may draft. Opening an issue, changing a published status, or sending a message is a separate action with a person on it. The triage study is that action, drawn on its own page, because it is a different system with a different threat.
+
+## Stack
+
+The design assumes a typed router, a trace log, a runner that can replay a case with a fixed seed, scorers with explicit inputs, and a report a person can read in one sitting. No vendor is named. Naming one would imply a platform is in use, and this page is not that claim.
+
+## Still open
+
+If a real harness exists, this page should be replaced with that one: the cases you are willing to describe, the scorers you actually run, and a link. The front matter fields for role, timeframe, and repository are empty until then.
